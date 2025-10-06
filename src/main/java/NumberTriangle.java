@@ -89,7 +89,7 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
+        // implement this method
         if (path.isEmpty()) {
             return this.root;
         } else if (path.charAt(0) == 'l') {
@@ -120,7 +120,7 @@ public class NumberTriangle {
         long nRows = br.lines().count();
         br.close();
 
-        // TODO define any variables that you want to use to store things
+        // define any variables that you want to use to store things
         NumberTriangle[][] triangleStack = new NumberTriangle[(int)nRows][]; // 2D array to store input values
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -134,9 +134,9 @@ public class NumberTriangle {
         int l = 0;  // 0-indexed line number of input file
         while (line != null) {
             // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            // System.out.println(line);
 
-            // TODO process the line
+            // process the line
             String[] roots = line.split(" ");
             NumberTriangle[] triangles = new NumberTriangle[roots.length];  // array storing values from 1 input row
             for (int i = 0; i < roots.length; i++) {
@@ -176,6 +176,7 @@ public class NumberTriangle {
     public static void main(String[] args) throws IOException {
 
         NumberTriangle mt = NumberTriangle.loadTriangle("input_tree.txt");
+
 
         // [not for credit]
         // you can implement NumberTriangle's maxPathSum method if you want to try to solve
