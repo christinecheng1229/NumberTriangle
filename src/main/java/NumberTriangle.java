@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -109,26 +110,61 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
+        // count the total number of rows in input file
+        long nRows = br.lines().count();
+        br.close();
 
         // TODO define any variables that you want to use to store things
-
+        NumberTriangle[][] triangleStack = new NumberTriangle[(int)nRows][]; // 2D array to store input values
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
 
-        String line = br.readLine();
-        while (line != null) {
+        // reopen stream
+        inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
+        br = new BufferedReader(new InputStreamReader(inputStream));
 
+        String line = br.readLine();
+        int l = 0;  // 0-indexed line number of input file
+        while (line != null) {
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
             // TODO process the line
-
+            String[] roots = line.split(" ");
+            NumberTriangle[] triangles = new NumberTriangle[roots.length];  // array storing values from 1 input row
+            for (int i = 0; i < roots.length; i++) {
+                int t = Integer.parseInt(roots[i]);
+                NumberTriangle nt = new NumberTriangle(t);
+                triangles[i] = nt;
+            }
+            triangleStack[l] = triangles;
             //read the next line
             line = br.readLine();
+            l++;
         }
         br.close();
+
+        top = triangleStack[0][0];
+        buildTriangle(triangleStack);
         return top;
+    }
+
+    private static NumberTriangle[][] buildTriangle(NumberTriangle[][] triangles) {
+        if (triangles.length == 1) {    // only 1 triangle or all leaf triangles remaining
+            return triangles;   // don't need to connect anything, just return
+        } else {    // at least 1 more row below current (i.e., root is not a leaf)
+            for (int col = 0; col < triangles[0].length; col++) {
+                triangles[0][col].setLeft(triangles[1][col]);
+                triangles[0][col].setRight(triangles[1][col + 1]);
+            }
+            // 2D array representing non-traversed triangles (row 0 removed)
+            NumberTriangle[][] trianglesSub = new NumberTriangle[triangles.length - 1][];
+            for (int x = 1; x < triangles.length; x++) {
+                trianglesSub[x - 1] = Arrays.copyOf(triangles[x], triangles[x].length);
+            }
+            return buildTriangle(trianglesSub);
+        }
     }
 
     public static void main(String[] args) throws IOException {
